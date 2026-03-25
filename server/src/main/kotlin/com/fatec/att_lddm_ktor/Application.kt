@@ -7,7 +7,6 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.swagger.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -17,33 +16,39 @@ fun main() {
 }
 
 fun Application.module() {
-    // 1. Inicializa o Banco (Cria tabelas e faz o Seed)
-    DatabaseFactory.init()
+    // 1. Inicializa o Banco com segurança
+    try {
+        DatabaseFactory.init()
+        println("✅ BANCO DE DADOS CONECTADO!")
+    } catch (e: Exception) {
+        println("❌ ERRO AO CONECTAR NO BANCO: ${e.message}")
+    }
 
-    // 2. Instancia o repositório para usar nas rotas
     val repository = FootballRepository()
 
-    // 3. Configura JSON
     install(ContentNegotiation) {
         json()
     }
 
-    // 4. Configura as Rotas
     routing {
-        // Página inicial simples
         get("/") {
             call.respondText("API de Times de Futebol está Online!")
         }
 
-        // Rota para listar os times (testando o banco)
         get("/times") {
-            val times = repository.allTeams()
-            call.respond(times)
+            try {
+                val times = repository.allTeams()
+                call.respond(times)
+            } catch (e: Exception) {
+                call.respondText("Erro ao buscar times: ${e.message}")
+            }
         }
 
-        // 5. Configura o Swagger
+        // 2. Swagger comentado até você criar o arquivo .yaml
+        /*
         swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
             version = "4.15.5"
         }
+        */
     }
 }
