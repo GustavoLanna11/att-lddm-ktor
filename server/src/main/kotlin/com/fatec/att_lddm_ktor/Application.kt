@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.swagger.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -16,10 +17,10 @@ fun main() {
 }
 
 fun Application.module() {
-    // 1. Inicializa o Banco com segurança
+    // Inicializa o Banco
     try {
         DatabaseFactory.init()
-        println("✅ BANCO DE DADOS CONECTADO!")
+        println("✅ BANCO DE DADOS CONECTADO COM SUCESSO!")
     } catch (e: Exception) {
         println("❌ ERRO AO CONECTAR NO BANCO: ${e.message}")
     }
@@ -37,18 +38,17 @@ fun Application.module() {
 
         get("/times") {
             try {
-                val times = repository.allTeams()
-                call.respond(times)
+                val listaDeTimes = repository.allTeams()
+                call.respond(listaDeTimes)
             } catch (e: Exception) {
-                call.respondText("Erro ao buscar times: ${e.message}")
+                println("Erro ao buscar times: ${e.message}")
+                call.respond(emptyList<Map<String, Any>>())
             }
         }
 
-        // 2. Swagger comentado até você criar o arquivo .yaml
-        /*
-        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
+        // Swagger configurado
+        swaggerUI(path = "swagger", swaggerFile = "documentation.yaml") {
             version = "4.15.5"
         }
-        */
     }
 }
