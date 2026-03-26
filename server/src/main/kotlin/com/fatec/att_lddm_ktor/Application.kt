@@ -2,6 +2,8 @@ package com.fatec.att_lddm_ktor
 
 import com.fatec.att_lddm_ktor.database.DatabaseFactory
 import com.fatec.att_lddm_ktor.repository.FootballRepository
+import com.fatec.att_lddm_ktor.routes.teamRoutes
+import com.fatec.att_lddm_ktor.routes.playerRoutes
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -17,7 +19,6 @@ fun main() {
 }
 
 fun Application.module() {
-    // Inicializa o Banco
     try {
         DatabaseFactory.init()
         println("✅ BANCO DE DADOS CONECTADO COM SUCESSO!")
@@ -33,20 +34,16 @@ fun Application.module() {
 
     routing {
         get("/") {
-            call.respondText("API de Times de Futebol está Online!")
+            call.respondText("API de Futebol FATEC está Online!")
         }
 
-        get("/times") {
-            try {
-                val listaDeTimes = repository.allTeams()
-                call.respond(listaDeTimes)
-            } catch (e: Exception) {
-                println("Erro ao buscar times: ${e.message}")
-                call.respond(emptyList<Map<String, Any>>())
-            }
-        }
+        // 1. Chama as rotas de Times (CRUD completo está lá dentro)
+        teamRoutes(repository)
 
-        // Swagger configurado
+        // 2. Chama as rotas de Jogadores (Para cumprir o requisito de 2 arquivos)
+        playerRoutes(repository)
+
+        // 3. Swagger
         swaggerUI(path = "swagger", swaggerFile = "documentation.yaml") {
             version = "4.15.5"
         }
