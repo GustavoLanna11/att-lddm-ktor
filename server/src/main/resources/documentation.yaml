@@ -49,6 +49,14 @@ paths:
           in: query
           schema:
             type: string
+        - name: estadio
+          in: query
+          schema:
+            type: string
+        - name: cidade
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: "Time atualizado"
@@ -94,6 +102,25 @@ paths:
           description: "Jogador criado"
 
   /jogadores/{id}:
+    put:
+      summary: "Atualiza um jogador existente"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: nome
+          in: query
+          schema:
+            type: string
+        - name: posicao
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Jogador atualizado"
     delete:
       summary: "Remove um jogador"
       parameters:
