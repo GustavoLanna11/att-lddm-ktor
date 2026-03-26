@@ -1,14 +1,107 @@
 openapi: "3.0.0"
 info:
   title: "API de Futebol FATEC"
-  description: "Gerenciamento de Times e Jogadores"
+  description: "Gerenciamento completo de Times e Jogadores (CRUD)"
   version: "1.0.0"
 servers:
   - url: "http://localhost:8080"
+
 paths:
+  # --- ROTAS DE TIMES ---
   /times:
     get:
       summary: "Lista todos os times"
       responses:
         '200':
-          description: "Lista de times em JSON"
+          description: "Lista de times retornada com sucesso"
+    post:
+      summary: "Cadastra um novo time"
+      parameters:
+        - name: nome
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: estadio
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: cidade
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: "Time criado"
+
+  /times/{id}:
+    put:
+      summary: "Atualiza um time existente"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: nome
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Time atualizado"
+    delete:
+      summary: "Remove um time"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Time removido"
+
+  # --- ROTAS DE JOGADORES ---
+  /jogadores:
+    get:
+      summary: "Lista todos os jogadores"
+      responses:
+        '200':
+          description: "Lista de jogadores retornada"
+    post:
+      summary: "Cadastra um novo jogador"
+      parameters:
+        - name: nome
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: posicao
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: teamId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: "Jogador criado"
+
+  /jogadores/{id}:
+    delete:
+      summary: "Remove um jogador"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Jogador removido"
