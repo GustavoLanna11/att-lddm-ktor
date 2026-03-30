@@ -15,16 +15,8 @@ paths:
         '200':
           description: "Lista de times cadastrados"
           content:
-            application/json:
-              example:
-                - id: 1
-                  nome: "Santos FC"
-                  estadio: "Vila Belmiro"
-                  cidade: "Santos"
-                - id: 2
-                  nome: "Palmeiras"
-                  estadio: "Allianz Parque"
-                  cidade: "São Paulo"
+            text/plain:
+              example: "ID: 1 | Nome: Santos | Estadio: Vila | Cidade: Santos"
     post:
       summary: "Cadastra um novo time"
       parameters:
@@ -58,6 +50,9 @@ paths:
         - name: estadio
           in: query
           schema: { type: string, example: "Spotify Camp Nou" }
+        - name: cidade
+          in: query
+          schema: { type: string, example: "Barcelona" }
       responses:
         '200':
           description: "Time atualizado"
@@ -80,12 +75,8 @@ paths:
         '200':
           description: "Lista de jogadores retornada"
           content:
-            application/json:
-              example:
-                - id: 1
-                  nome: "Neymar Jr"
-                  posicao: "Atacante"
-                  teamId: 1
+            text/plain:
+              example: "ID: 1 | Nome: Neymar | Posicao: Atacante | TimeID: 1"
     post:
       summary: "Cadastra um novo jogador"
       parameters:
