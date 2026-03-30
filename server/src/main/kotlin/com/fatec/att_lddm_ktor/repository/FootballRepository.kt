@@ -30,7 +30,7 @@ class FootballRepository {
         TeamsTable.update({ TeamsTable.id eq idT }) { it[nome] = nomeT; it[estadio] = estadioT; it[cidade] = cidadeT }
     }
 
-    fun deleteTeam(idT: Int) = transaction {
+    fun deleteTeam(idT: Int): Int = transaction {
         TeamsTable.deleteWhere { TeamsTable.id eq idT }
     }
 
@@ -42,7 +42,8 @@ class FootballRepository {
         PlayersTable.update({ PlayersTable.id eq idP }) { it[nome] = nomeP; it[posicao] = posicaoP }
     }
 
-    fun deletePlayer(idP: Int) = transaction {
+
+    fun deletePlayer(idP: Int): Int = transaction {
         PlayersTable.deleteWhere { PlayersTable.id eq idP }
     }
 }

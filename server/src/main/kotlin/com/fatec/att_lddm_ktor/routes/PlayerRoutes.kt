@@ -10,7 +10,7 @@ fun Route.playerRoutes(repository: FootballRepository) {
     route("/jogadores") {
         get {
             try {
-                call.respond(repository.allPlayers())
+                call.respondText(text = repository.allPlayers(), contentType = ContentType.Text.Plain)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.InternalServerError, "Erro ao buscar jogadores")
             }
@@ -25,7 +25,7 @@ fun Route.playerRoutes(repository: FootballRepository) {
                 repository.createPlayer(nome, posicao, teamId)
                 call.respond(HttpStatusCode.Created, "Jogador $nome cadastrado!")
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Erro ao cadastrar jogador. Verifique se o teamId existe.")
+                call.respond(HttpStatusCode.BadRequest, "Erro ao cadastrar jogador.")
             }
         }
 
@@ -50,8 +50,12 @@ fun Route.playerRoutes(repository: FootballRepository) {
             try {
                 val id = call.parameters["id"]?.toIntOrNull()
                 if (id != null) {
-                    repository.deletePlayer(id)
-                    call.respond(HttpStatusCode.OK, "Jogador removido!")
+                    val qtdDeletada = repository.deletePlayer(id)
+                    if (qtdDeletada > 0) {
+                        call.respond(HttpStatusCode.OK, "Jogador removido com sucesso!")
+                    } else {
+                        call.respond(HttpStatusCode.NotFound, "Jogador com ID $id não encontrado!")
+                    }
                 } else {
                     call.respond(HttpStatusCode.BadRequest, "ID inválido")
                 }

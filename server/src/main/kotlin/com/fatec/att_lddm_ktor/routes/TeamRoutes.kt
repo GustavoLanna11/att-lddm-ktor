@@ -51,8 +51,12 @@ fun Route.teamRoutes(repository: FootballRepository) {
             try {
                 val id = call.parameters["id"]?.toIntOrNull()
                 if (id != null) {
-                    repository.deleteTeam(id)
-                    call.respond(HttpStatusCode.OK, "Time removido!")
+                    val qtdDeletada = repository.deleteTeam(id)
+                    if (qtdDeletada > 0) {
+                        call.respond(HttpStatusCode.OK, "Time removido com sucesso!")
+                    } else {
+                        call.respond(HttpStatusCode.NotFound, "Time com ID $id não encontrado!")
+                    }
                 } else {
                     call.respond(HttpStatusCode.BadRequest, "ID inválido")
                 }
