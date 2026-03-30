@@ -8,11 +8,18 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class FootballRepository {
 
-    // Times
-    fun allTeams(): List<Map<String, Any>> = transaction {
-        TeamsTable.selectAll().map {
-            mapOf("id" to it[TeamsTable.id], "nome" to it[TeamsTable.nome], "estadio" to it[TeamsTable.estadio], "cidade" to it[TeamsTable.cidade])
+    fun allTeams(): String = transaction {
+        val times = TeamsTable.selectAll().map {
+            "ID: ${it[TeamsTable.id]} | Nome: ${it[TeamsTable.nome]} | Estádio: ${it[TeamsTable.estadio]} | Cidade: ${it[TeamsTable.cidade]}"
         }
+        if (times.isEmpty()) "Nenhum time cadastrado." else times.joinToString("\n")
+    }
+
+    fun allPlayers(): String = transaction {
+        val jogadores = PlayersTable.selectAll().map {
+            "ID: ${it[PlayersTable.id]} | Nome: ${it[PlayersTable.nome]} | Posição: ${it[PlayersTable.posicao]} | TimeID: ${it[PlayersTable.teamId]}"
+        }
+        if (jogadores.isEmpty()) "Nenhum jogador cadastrado." else jogadores.joinToString("\n")
     }
 
     fun createTeam(nomeT: String, estadioT: String, cidadeT: String) = transaction {
@@ -27,22 +34,12 @@ class FootballRepository {
         TeamsTable.deleteWhere { TeamsTable.id eq idT }
     }
 
-    // Jogadores
-    fun allPlayers(): List<Map<String, Any>> = transaction {
-        PlayersTable.selectAll().map {
-            mapOf("id" to it[PlayersTable.id], "nome" to it[PlayersTable.nome], "posicao" to it[PlayersTable.posicao], "teamId" to it[PlayersTable.teamId])
-        }
-    }
-
     fun createPlayer(nomeP: String, posicaoP: String, idDoTime: Int) = transaction {
         PlayersTable.insert { it[nome] = nomeP; it[posicao] = posicaoP; it[teamId] = idDoTime }
     }
 
     fun updatePlayer(idP: Int, nomeP: String, posicaoP: String) = transaction {
-        PlayersTable.update({ PlayersTable.id eq idP }) {
-            it[nome] = nomeP
-            it[posicao] = posicaoP
-        }
+        PlayersTable.update({ PlayersTable.id eq idP }) { it[nome] = nomeP; it[posicao] = posicaoP }
     }
 
     fun deletePlayer(idP: Int) = transaction {

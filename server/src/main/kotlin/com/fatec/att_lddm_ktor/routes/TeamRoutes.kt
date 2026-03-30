@@ -10,7 +10,8 @@ fun Route.teamRoutes(repository: FootballRepository) {
     route("/times") {
         get {
             try {
-                call.respond(repository.allTeams())
+                val listaDeTimes = repository.allTeams()
+                call.respondText(text = listaDeTimes, contentType = ContentType.Text.Plain)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.InternalServerError, "Erro ao buscar times")
             }
