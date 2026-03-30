@@ -21,10 +21,11 @@ fun Route.playerRoutes(repository: FootballRepository) {
                 val nome = call.parameters["nome"] ?: ""
                 val posicao = call.parameters["posicao"] ?: ""
                 val teamId = call.parameters["teamId"]?.toIntOrNull() ?: 0
+
                 repository.createPlayer(nome, posicao, teamId)
-                call.respond(HttpStatusCode.Created, "Jogador cadastrado!")
+                call.respond(HttpStatusCode.Created, "Jogador $nome cadastrado!")
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Dados inválidos")
+                call.respond(HttpStatusCode.BadRequest, "Erro ao cadastrar jogador. Verifique se o teamId existe.")
             }
         }
 
@@ -33,8 +34,9 @@ fun Route.playerRoutes(repository: FootballRepository) {
                 val id = call.parameters["id"]?.toIntOrNull()
                 val nome = call.parameters["nome"] ?: ""
                 val posicao = call.parameters["posicao"] ?: ""
+
                 if (id != null) {
-                    repository.updatePlayer(id, nome, posicao) // Agora a função existe!
+                    repository.updatePlayer(id, nome, posicao)
                     call.respond(HttpStatusCode.OK, "Jogador $id atualizado!")
                 } else {
                     call.respond(HttpStatusCode.BadRequest, "ID inválido")

@@ -22,7 +22,7 @@ fun Route.teamRoutes(repository: FootballRepository) {
                 val estadio = call.parameters["estadio"] ?: ""
                 val cidade = call.parameters["cidade"] ?: ""
                 repository.createTeam(nome, estadio, cidade)
-                call.respond(HttpStatusCode.Created, "Time cadastrado!")
+                call.respond(HttpStatusCode.Created, "Time $nome cadastrado!")
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest, "Dados inválidos")
             }
@@ -34,9 +34,10 @@ fun Route.teamRoutes(repository: FootballRepository) {
                 val nome = call.parameters["nome"] ?: ""
                 val estadio = call.parameters["estadio"] ?: ""
                 val cidade = call.parameters["cidade"] ?: ""
+
                 if (id != null) {
                     repository.updateTeam(id, nome, estadio, cidade)
-                    call.respond(HttpStatusCode.OK, "Time atualizado!")
+                    call.respond(HttpStatusCode.OK, "Time atualizado com sucesso!")
                 } else {
                     call.respond(HttpStatusCode.BadRequest, "ID inválido")
                 }
