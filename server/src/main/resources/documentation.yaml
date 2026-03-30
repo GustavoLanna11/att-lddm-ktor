@@ -1,62 +1,63 @@
 openapi: "3.0.0"
 info:
   title: "API de Futebol FATEC"
-  description: "Gerenciamento completo de Times e Jogadores (CRUD)"
+  description: "Gerenciamento completo de Times e Jogadores (CRUD). Use o botão 'Try it out' para testar as rotas."
   version: "1.0.0"
 servers:
   - url: "http://localhost:8080"
 
 paths:
-  # --- ROTAS DE TIMES ---
+  # --- TIMES ---
   /times:
     get:
       summary: "Lista todos os times"
       responses:
         '200':
-          description: "Lista de times retornada com sucesso"
+          description: "Lista de times cadastrados"
+          content:
+            application/json:
+              example:
+                - id: 1
+                  nome: "Santos FC"
+                  estadio: "Vila Belmiro"
+                  cidade: "Santos"
+                - id: 2
+                  nome: "Palmeiras"
+                  estadio: "Allianz Parque"
+                  cidade: "São Paulo"
     post:
       summary: "Cadastra um novo time"
       parameters:
         - name: nome
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string, example: "Barcelona" }
         - name: estadio
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string, example: "Camp Nou" }
         - name: cidade
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string, example: "Catalunha" }
       responses:
         '201':
-          description: "Time criado"
+          description: "Time criado com sucesso"
 
   /times/{id}:
     put:
-      summary: "Atualiza um time existente"
+      summary: "Atualiza um time"
       parameters:
         - name: id
           in: path
           required: true
-          schema:
-            type: integer
+          schema: { type: integer, example: 1 }
         - name: nome
           in: query
-          schema:
-            type: string
+          schema: { type: string, example: "Barcelona Atualizado" }
         - name: estadio
           in: query
-          schema:
-            type: string
-        - name: cidade
-          in: query
-          schema:
-            type: string
+          schema: { type: string, example: "Spotify Camp Nou" }
       responses:
         '200':
           description: "Time atualizado"
@@ -66,58 +67,58 @@ paths:
         - name: id
           in: path
           required: true
-          schema:
-            type: integer
+          schema: { type: integer, example: 1 }
       responses:
         '200':
           description: "Time removido"
 
-  # --- ROTAS DE JOGADORES ---
+  # --- JOGADORES ---
   /jogadores:
     get:
       summary: "Lista todos os jogadores"
       responses:
         '200':
           description: "Lista de jogadores retornada"
+          content:
+            application/json:
+              example:
+                - id: 1
+                  nome: "Neymar Jr"
+                  posicao: "Atacante"
+                  teamId: 1
     post:
       summary: "Cadastra um novo jogador"
       parameters:
         - name: nome
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string, example: "Pelé" }
         - name: posicao
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string, example: "Atacante" }
         - name: teamId
           in: query
           required: true
-          schema:
-            type: integer
+          schema: { type: integer, example: 1 }
       responses:
         '201':
           description: "Jogador criado"
 
   /jogadores/{id}:
     put:
-      summary: "Atualiza um jogador existente"
+      summary: "Atualiza um jogador"
       parameters:
         - name: id
           in: path
           required: true
-          schema:
-            type: integer
+          schema: { type: integer, example: 1 }
         - name: nome
           in: query
-          schema:
-            type: string
+          schema: { type: string, example: "Pelé" }
         - name: posicao
           in: query
-          schema:
-            type: string
+          schema: { type: string, example: "Rei do Futebol" }
       responses:
         '200':
           description: "Jogador atualizado"
@@ -127,8 +128,7 @@ paths:
         - name: id
           in: path
           required: true
-          schema:
-            type: integer
+          schema: { type: integer, example: 1 }
       responses:
         '200':
           description: "Jogador removido"
