@@ -8,53 +8,40 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class FootballRepository {
 
+    // Times
     fun allTeams(): List<Map<String, Any>> = transaction {
         TeamsTable.selectAll().map {
-            mapOf(
-                "id" to it[TeamsTable.id],
-                "nome" to it[TeamsTable.nome],
-                "estadio" to it[TeamsTable.estadio],
-                "cidade" to it[TeamsTable.cidade]
-            )
+            mapOf("id" to it[TeamsTable.id], "nome" to it[TeamsTable.nome], "estadio" to it[TeamsTable.estadio], "cidade" to it[TeamsTable.cidade])
         }
     }
 
     fun createTeam(nomeT: String, estadioT: String, cidadeT: String) = transaction {
-        TeamsTable.insert {
-            it[nome] = nomeT
-            it[estadio] = estadioT
-            it[cidade] = cidadeT
-        }
+        TeamsTable.insert { it[nome] = nomeT; it[estadio] = estadioT; it[cidade] = cidadeT }
     }
 
     fun updateTeam(idT: Int, nomeT: String, estadioT: String, cidadeT: String) = transaction {
-        TeamsTable.update({ TeamsTable.id eq idT }) {
-            it[nome] = nomeT
-            it[estadio] = estadioT
-            it[cidade] = cidadeT
-        }
+        TeamsTable.update({ TeamsTable.id eq idT }) { it[nome] = nomeT; it[estadio] = estadioT; it[cidade] = cidadeT }
     }
 
     fun deleteTeam(idT: Int) = transaction {
         TeamsTable.deleteWhere { TeamsTable.id eq idT }
     }
 
+    // Jogadores
     fun allPlayers(): List<Map<String, Any>> = transaction {
         PlayersTable.selectAll().map {
-            mapOf(
-                "id" to it[PlayersTable.id],
-                "nome" to it[PlayersTable.nome],
-                "posicao" to it[PlayersTable.posicao],
-                "teamId" to it[PlayersTable.teamId]
-            )
+            mapOf("id" to it[PlayersTable.id], "nome" to it[PlayersTable.nome], "posicao" to it[PlayersTable.posicao], "teamId" to it[PlayersTable.teamId])
         }
     }
 
     fun createPlayer(nomeP: String, posicaoP: String, idDoTime: Int) = transaction {
-        PlayersTable.insert {
+        PlayersTable.insert { it[nome] = nomeP; it[posicao] = posicaoP; it[teamId] = idDoTime }
+    }
+
+    fun updatePlayer(idP: Int, nomeP: String, posicaoP: String) = transaction {
+        PlayersTable.update({ PlayersTable.id eq idP }) {
             it[nome] = nomeP
             it[posicao] = posicaoP
-            it[teamId] = idDoTime
         }
     }
 
